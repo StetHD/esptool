@@ -303,6 +303,7 @@ class ESPROM:
         self.mem_finish(0x4010001c)
 
         # Fetch the data
+        t = time.time()
         data = ''
         for _ in xrange(count):
             if self._port.read(1) != '\xc0':
@@ -313,6 +314,8 @@ class ESPROM:
             if self._port.read(1) != chr(0xc0):
                 raise FatalError('Invalid end of packet (sflash read)')
 
+        t = time.time() - t
+        print '\nRead %d bytes in %.2f seconds (%.2f kbit/s)...' % (len(data), t, len(data) / t * 8 / 1000)
         return data
 
     """ Abuse the loader protocol to force flash to be left in write mode """
