@@ -310,6 +310,9 @@ class ESPROM:
                 raise FatalError('Invalid head of packet (sflash read)')
 
             data += self.read(size)
+            if len(data) % 4096 == 0:
+                sys.stdout.write(".")
+                sys.stdout.flush()
 
             if self._port.read(1) != chr(0xc0):
                 raise FatalError('Invalid end of packet (sflash read)')
